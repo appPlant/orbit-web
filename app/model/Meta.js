@@ -19,6 +19,6 @@ Ext.define('Orbit.model.Meta', {
     extend: 'Orbit.model.Base',
 
     fields: [
-        'id', 'name', 'count'
+        'name', 'count'
     ]
 });

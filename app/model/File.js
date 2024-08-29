@@ -19,9 +19,6 @@ Ext.define('Orbit.model.File', {
     extend: 'Orbit.model.Base',
 
     fields: [{
-        name: 'id',
-        type: 'string'
-    },{
         name: 'planet_id',
         type: 'string'
     },{

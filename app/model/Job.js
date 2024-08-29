@@ -23,9 +23,8 @@ Ext.define('Orbit.model.Job', {
     ],
 
     fields: [{
-        name: 'id'
-    },{
-        name: 'name'
+        name: 'name',
+        type: 'string'
     },{
         name: 'runs',
         type: 'int'
