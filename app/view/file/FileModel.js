@@ -20,19 +20,24 @@ Ext.define('Orbit.view.file.FileModel', {
 
     requires: [
         'Orbit.model.Planet',
+        'Orbit.model.Config',
         'Orbit.model.File',
         'Orbit.model.FileContent'
     ],
 
     alias: 'viewmodel.file',
 
-    data: {
-        maxSize: 2e7
+    links: {
+        config: {
+            type: 'Config',
+            create: true
+        }
     },
 
     formulas: {
         fileSize: function(get) {
-            return get('size.value') != null ? Math.min(get('size.value'), get('maxSize')) : -1e4;
+            // return get('size.value') != null ? Math.min(get('size.value'), get('config.maxFileSize')) : -1e4;
+            return get('size.value') != null ? get('size.value') : -1e4;
         }
     },
 
@@ -40,6 +45,7 @@ Ext.define('Orbit.view.file.FileModel', {
         planets: {
             storeId: 'planets',
             model: 'Planet',
+            trackRemoved: false,
 
             proxy: {
                 url: '/planets',
@@ -48,15 +54,16 @@ Ext.define('Orbit.view.file.FileModel', {
                 pageParam: '',
                 startParam: '',
                 limitParam: '',
-                noCache: false,
+                noCache: false
 
-                extraParams: {
-                    scope: 'lfv'
-                }
+                // extraParams: {
+                //     scope: 'lfv'
+                // }
             },
 
             //<debug>
             data: [
+                ['milky-way', 'Log Groups', '', 'server'],
                 ['p07-prod', 'Leipzig Blech PROD', 'apipst50.w7', 'server'],
                 ['p07-int',  'Leipzig Blech INT',  'taipst50.w7', 'server']
             ],
@@ -69,12 +76,16 @@ Ext.define('Orbit.view.file.FileModel', {
             }],
 
             sorters: [{
+                property: 'galaxy',
+                direction: 'DESC'
+            },{
                 property: 'name'
             }]
         },
         files: {
             storeId: 'files',
             model: 'File',
+            trackRemoved: false,
 
             proxy: {
                 url: '/planets/{planet.value}/logs',
@@ -83,14 +94,15 @@ Ext.define('Orbit.view.file.FileModel', {
                 pageParam: '',
                 startParam: '',
                 limitParam: '',
-                noCache: false
+                noCache: false,
+                timeout: '{config.requestTimeout}'
             },
 
             //<debug>
             data: [
-                ['km~log~tcp_trace.100',        'p07-prod', 'M9FI0G02', 'km/log/tcp_trace.100',        512,  1528230769],
-                ['orbit~config~keys~orbit.key', 'p07-prod', null,       'orbit/config/keys/orbit.key', 1024, 1528198635],
-                ['km~log~tcp_trace.1234',       'p07-int',  'M9FI0G02', 'km/log/tcp_trace.1234',       2448, 1503915473]
+                ['km~log~tcp_trace.100',        'p07-prod', 'km/log/tcp_trace.100',        512,  1528230769, 'M9FI0G02'],
+                ['orbit~config~keys~orbit.key', 'p07-prod', 'orbit/config/keys/orbit.key', 1024, 1528198635],
+                ['km~log~tcp_trace.1234',       'p07-int',  'km/log/tcp_trace.1234',       2448, 1503915473,  'M9FI0G02']
             ],
             //</debug>
 
@@ -107,6 +119,7 @@ Ext.define('Orbit.view.file.FileModel', {
         lines: {
             storeId: 'lines',
             model: 'FileContent',
+            trackRemoved: false,
 
             proxy: {
                 url: '/planets/{planet.value}/logs/{file.value}',
@@ -116,6 +129,7 @@ Ext.define('Orbit.view.file.FileModel', {
                 startParam: '',
                 limitParam: '',
                 noCache: false,
+                timeout: '{config.requestTimeout}',
 
                 extraParams: {
                     size: '{fileSize}'
@@ -162,16 +176,40 @@ Ext.define('Orbit.view.file.FileModel', {
 
             data: [
                 { id: 0,    text: 'Manually reload' },
-                { id: 2e3,  text: 'Reload every 2 sec' },
-                { id: 5e3,  text: 'Reload every 5 sec' },
-                { id: 15e3, text: 'Reload every 15 sec' },
-                { id: 3e4,  text: 'Reload every 30 sec' },
-                { id: 6e4,  text: 'Reload every 60 sec' },
-                { id: 12e4, text: 'Reload every 120 sec' }
+                { id: 2e3,  text: 'Reload every <strong>2</strong> sec' },
+                { id: 5e3,  text: 'Reload every <strong>5</strong> sec' },
+                { id: 15e3, text: 'Reload every <strong>15</strong> sec' },
+                { id: 3e4,  text: 'Reload every <strong>30</strong> sec' },
+                { id: 6e4,  text: 'Reload every <strong>60</strong> sec' },
+                { id: 12e4, text: 'Reload every <strong>120</strong> sec' }
             ]
         },
         sizes: {
             fields: ['text', 'disabled'],
+
+            // data: [
+            //     { id: +5e3, text: 'Load 5 kB' },
+            //     { id: -5e3, text: 'Load 5 kB from end' },
+            //     { id: +1e4, text: 'Load 10 kB' },
+            //     { id: -1e4, text: 'Load 10 kB from end' },
+            //     { id: +5e4, text: 'Load 50 kB',           disabled: '{file.size > config.maxFileSize}' },
+            //     { id: -5e4, text: 'Load 50 kB from end',  disabled: '{file.size > config.maxFileSize}' },
+            //     { id: +1e5, text: 'Load 100 kB',          disabled: '{file.size > config.maxFileSize}' },
+            //     { id: -1e5, text: 'Load 100 kB from end', disabled: '{file.size > config.maxFileSize}' },
+            //     { id: +2e5, text: 'Load 200 kB',          disabled: '{file.size > config.maxFileSize}' },
+            //     { id: -2e5, text: 'Load 200 kB from end', disabled: '{file.size > config.maxFileSize}' },
+            //     { id: +5e5, text: 'Load 500 kB',          disabled: '{file.size > config.maxFileSize}' },
+            //     { id: -5e5, text: 'Load 500 kB from end', disabled: '{file.size > config.maxFileSize}' },
+            //     { id: +1e6, text: 'Load 1 MB',            disabled: '{file.size > config.maxFileSize}' },
+            //     { id: -1e6, text: 'Load 1 MB from end',   disabled: '{file.size > config.maxFileSize}' },
+            //     { id: +2e6, text: 'Load 2 MB',            disabled: '{file.size > config.maxFileSize}' },
+            //     { id: -2e6, text: 'Load 2 MB from end',   disabled: '{file.size > config.maxFileSize}' },
+            //     { id: +5e6, text: 'Load 5 MB',            disabled: '{file.size > config.maxFileSize}' },
+            //     { id: -5e6, text: 'Load 5 MB from end',   disabled: '{file.size > config.maxFileSize}' },
+            //     { id: +1e7, text: 'Load 10 MB',           disabled: '{file.size > config.maxFileSize}' },
+            //     { id: -1e7, text: 'Load 10 MB from end',  disabled: '{file.size > config.maxFileSize}' },
+            //     { id: 0,    text: 'Load everything',      disabled: '{file.size > config.maxFileSize}' }
+            // ]
 
             data: [
                 { id: +5e3, text: 'Load 5 kB' },
@@ -194,7 +232,17 @@ Ext.define('Orbit.view.file.FileModel', {
                 { id: -5e6, text: 'Load 5 MB from end' },
                 { id: +1e7, text: 'Load 10 MB' },
                 { id: -1e7, text: 'Load 10 MB from end' },
-                { id: 0,    text: 'Load everything', disabled: '{file.size > maxSize}' }
+                { id: +2e7, text: 'Load 20 MB' },
+                { id: -2e7, text: 'Load 20 MB from end' },
+                { id: +5e7, text: 'Load 50 MB' },
+                { id: -5e7, text: 'Load 50 MB from end' },
+                { id: +1e8, text: 'Load 100 MB' },
+                { id: -1e8, text: 'Load 100 MB from end' },
+                { id: +2e8, text: 'Load 200 MB' },
+                { id: -2e8, text: 'Load 200 MB from end' },
+                { id: +5e8, text: 'Load 500 MB' },
+                { id: -5e8, text: 'Load 500 MB from end' },
+                { id: 0,    text: 'Load everything' }
             ]
         }
     }

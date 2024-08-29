@@ -15,23 +15,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-Ext.define('Orbit.Application', {
-    extend: 'Ext.app.Application',
+Ext.define('Orbit.store.Configs', {
+    extend: 'Ext.data.Store',
 
-    uses: [
-        'Orbit.view.UpdateDialog'
-    ],
+    model: 'Orbit.model.Config',
+    storeId: 'configs',
 
-    stores: [
-        'Configs'
-    ],
+    proxy: {
+        type: 'ajax',
+        url: '/configs',
+        pageParam: '',
+        startParam: '',
+        limitParam: '',
+        noCache: false
+    },
 
-    name: 'Orbit',
-    quickTips: true,
+    trackRemoved: false,
+    autoLoad: true,
 
-    defaultToken: 'report',
+    listeners: {
+        load: function(store, records, successful) {
+            if (store.getCount() == 0) {
+                store.add({ id: 1 });
+            }
 
-    onAppUpdate: function() {
-        Ext.create('Orbit.view.UpdateDialog').show();
+            Orbit.config = store.first().data;
+        }
     }
 });

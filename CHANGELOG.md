@@ -12,6 +12,12 @@ Released at: not yet released
 
 3. Remove bang ('!') token from all routes.
 
+4. Load iss web config settings (request timeout, max file size).
+
+5.
+
+[Full Changelog](https://github.com/katzer/iss-web/compare/1.5.1...HEAD)
+
 ## 1.5.1
 
 Released at: 18.03.2020

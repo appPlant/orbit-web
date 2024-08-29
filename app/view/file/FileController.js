@@ -20,6 +20,10 @@ Ext.define('Orbit.view.file.FileController', {
 
     alias: 'controller.file',
 
+    uses: [
+        'Ext.MessageBox'
+    ],
+
     routes: {
         'lfv/:state': {
             before: 'onBeforeNavigate'
@@ -36,6 +40,9 @@ Ext.define('Orbit.view.file.FileController', {
             },
             '#lines': {
                 load: 'onContentLoaded'
+            },
+            '#configs': {
+                load: 'onConfigLoaded'
             }
         }
     },
@@ -81,6 +88,8 @@ Ext.define('Orbit.view.file.FileController', {
      */
     onFileChanged: function() {
         this.setDocTitle('file.name', 'planet.name');
+        this.lookup('size').reset()
+        this.lookup('cycle').reset()
         this.loadContent();
     },
 
@@ -98,17 +107,32 @@ Ext.define('Orbit.view.file.FileController', {
     },
 
     /**
+     * Called when config is loaded.
+     */
+    onConfigLoaded: function(store) {
+        this.setData('config', store.first());
+    },
+
+    /**
      * Filter locally once the store has been loaded.
      */
-    onStoreLoaded: function(comboId) {
+    onStoreLoaded: function(comboId, store, records, successful, op) {
         this.tweakCombo(comboId, 'local');
+
+        if (!successful) {
+            this.showErrorMsg(op.error.response);
+        }
     },
 
     /**
      * Scroll to the top or end of the content grid.
      */
-    onContentLoaded: function() {
+    onContentLoaded: function(store, records, successful, op) {
         this.scrollTo(this.getScrollY());
+
+        if (!successful) {
+            this.showErrorMsg(op.error.response);
+        }
     },
 
     /**
@@ -192,5 +216,24 @@ Ext.define('Orbit.view.file.FileController', {
      */
     getScrollY: function() {
         return this.getData('size.id') >= 0 ? 0 : Infinity;
+    },
+
+    /**
+     * Show an error dialog to inform the user if an error-msg is specified.
+     */
+    showErrorMsg: function(errorResponse) {
+        var config = this.getData('config');
+        var errorMsg = config.get('errorMsg');
+
+        if (errorMsg) {
+            Ext.MessageBox.show({
+                msg: errorMsg,
+                icon: 'x-message-box-error',
+                cls: 'show-icon-messagebox',
+                closable: false,
+                buttons: Ext.MessageBox.OK,
+                maskClickAction: 'hide'
+            });
+        }
     }
 });

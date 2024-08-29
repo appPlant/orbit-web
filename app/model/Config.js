@@ -15,23 +15,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-Ext.define('Orbit.Application', {
-    extend: 'Ext.app.Application',
+Ext.define('Orbit.model.Config', {
+    extend: 'Orbit.model.Base',
 
-    uses: [
-        'Orbit.view.UpdateDialog'
+    requires: [
+        'Ext.data.identifier.Sequential'
     ],
 
-    stores: [
-        'Configs'
-    ],
+    idProperty: 'id',
+    identifier: 'sequential',
 
-    name: 'Orbit',
-    quickTips: true,
-
-    defaultToken: 'report',
-
-    onAppUpdate: function() {
-        Ext.create('Orbit.view.UpdateDialog').show();
-    }
+    fields: [{
+        name: 'requestTimeout',
+        mapping: 'request-timeout',
+        defaultValue: 30000,
+        type: 'int'
+    },{
+        name: 'maxFileSize',
+        mapping: 'max-file-size',
+        defaultValue: 2e7,
+        type: 'int'
+    },{
+        name: 'errorMsg',
+        mapping: 'error-msg',
+        type: 'string'
+    }]
 });
