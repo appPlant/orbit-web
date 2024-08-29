@@ -116,9 +116,7 @@ Ext.define('Orbit.view.file.File', {
 
             defaultListConfig: {
                 emptyText: 'No content',
-                shadow: false,
-                resizable: true,
-                resizeHandles: 's'
+                shadow: false
             }
         },
 
@@ -130,6 +128,10 @@ Ext.define('Orbit.view.file.File', {
             anyMatch: false,
             hidden: false,
 
+            listConfig: {
+                resizable: true,
+                resizeHandles: 's e'
+            },
             bind: {
                 store: '{planets}',
                 selection: '{planet}'
@@ -163,6 +165,10 @@ Ext.define('Orbit.view.file.File', {
             anyMatch: true,
             width: Ext.isSafari ? 412 : 413,
 
+            listConfig: {
+                resizable: true,
+                resizeHandles: 's e'
+            },
             bind: {
                 store: '{files}',
                 selection: '{file}',

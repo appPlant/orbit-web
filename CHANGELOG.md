@@ -14,7 +14,7 @@ Released at: not yet released
 
 4. Load iss web config settings (request timeout, max file size).
 
-5.
+5. Make combo boxes for planets and files expandables.
 
 [Full Changelog](https://github.com/katzer/iss-web/compare/1.5.1...HEAD)
 
