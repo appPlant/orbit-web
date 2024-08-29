@@ -32,6 +32,7 @@ Ext.define('Orbit.view.stats.StatsModel', {
         stats: {
             model: 'Meta',
             autoLoad: true,
+            trackRemoved: false,
             storeId: 'stats',
 
             //<debug>

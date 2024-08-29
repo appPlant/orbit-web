@@ -29,6 +29,7 @@ Ext.define('Orbit.view.report.ReportModel', {
     stores: {
         jobs: {
             model: 'Job',
+            trackRemoved: false,
 
             proxy: {
                 url: '/jobs',
@@ -54,6 +55,7 @@ Ext.define('Orbit.view.report.ReportModel', {
 
         reports: {
             model: 'Report',
+            trackRemoved: false,
 
             proxy: {
                 url: '/jobs/{job.value}/reports',
@@ -86,6 +88,7 @@ Ext.define('Orbit.view.report.ReportModel', {
         },
         results: {
             model: 'Result',
+            trackRemoved: false,
 
             proxy: {
                 url: '/jobs/{job.value}/reports/{report.value}/results',
