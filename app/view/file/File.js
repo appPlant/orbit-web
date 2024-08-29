@@ -36,7 +36,7 @@ Ext.define('Orbit.view.file.File', {
         'Orbit.view.file.FileExportController',
         'Orbit.view.file.FileReloadController',
         'Orbit.view.file.FileSearchController',
-        'Orbit.view.file.FileModel',
+        'Orbit.view.file.FileModel'
     ],
 
     uses: [
@@ -132,6 +132,7 @@ Ext.define('Orbit.view.file.File', {
                 resizable: true,
                 resizeHandles: 's e'
             },
+
             bind: {
                 store: '{planets}',
                 selection: '{planet}'
@@ -151,10 +152,13 @@ Ext.define('Orbit.view.file.File', {
                 '<ul class="' + Ext.plainListCls + '"><tpl for=".">',
                     '<li role="option" class="' + Ext.baseCSSPrefix + 'boundlist-item">',
                         '<strong>{name}</strong>',
-                        '<div class="' + Ext.baseCSSPrefix + 'boundlist-subitem">',
-                            '{url}',
-                        '</div>',
+                        '<tpl if="!galaxy">',
+                            '<div class="' + Ext.baseCSSPrefix + 'boundlist-subitem">',
+                                '{url}',
+                            '</div>',
+                        '</tpl>',
                     '</li>',
+                    '<tpl if="galaxy"><hr/></tpl>',
                 '</tpl></ul>'
             ]
         },{
@@ -169,6 +173,7 @@ Ext.define('Orbit.view.file.File', {
                 resizable: true,
                 resizeHandles: 's e'
             },
+
             bind: {
                 store: '{files}',
                 selection: '{file}',

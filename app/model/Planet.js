@@ -18,7 +18,21 @@
 Ext.define('Orbit.model.Planet', {
     extend: 'Orbit.model.Base',
 
-    fields: [
-        'id', 'name', 'url', 'type'
-    ]
+    fields: [{
+        name: 'name',
+        type: 'string'
+    },{
+        name: 'url',
+        type: 'string'
+    },{
+        name: 'type',
+        type: 'string'
+    },{
+        name: 'galaxy',
+        type: 'boolean',
+
+        calculate: function(data) {
+            return data.id == 'milky-way';
+        }
+    }]
 });

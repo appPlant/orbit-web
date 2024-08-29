@@ -25,9 +25,6 @@ Ext.define('Orbit.model.File', {
         name: 'planet_id',
         type: 'string'
     },{
-        name: 'plc_id',
-        type: 'string'
-    },{
         name: 'name',
         type: 'string'
     },{
@@ -41,7 +38,11 @@ Ext.define('Orbit.model.File', {
             return new Date(val * 1000);
         }
     },{
+        name: 'plc_id',
+        type: 'string'
+    },{
         name: 'fullName',
+        type: 'string',
 
         calculate: function(data) {
             return data.plc_id ? data.name + ' [' + data.plc_id + ']' : data.name;

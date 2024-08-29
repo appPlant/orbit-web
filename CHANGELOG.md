@@ -16,6 +16,8 @@ Released at: not yet released
 
 5. Make combo boxes for planets and files expandables.
 
+6. Support virtual log files.
+
 [Full Changelog](https://github.com/katzer/iss-web/compare/1.5.1...HEAD)
 
 ## 1.5.1
