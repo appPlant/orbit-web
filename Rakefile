@@ -22,7 +22,7 @@ end
 desc 'clean build artefacts'
 task :clean do
   rm_rf 'build'
-  rm_rf '${ext.dir}'
+  sh 'sencha app clean'
 end
 
 desc 'Update packages'
