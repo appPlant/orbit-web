@@ -4,7 +4,7 @@ A web frontend for _iss_.
 
 ## 1.5.2
 
-Released at: not yet released
+Released at: 29.08.2024
 
 1. Upgrade to ExtJS 7.
 
@@ -18,7 +18,7 @@ Released at: not yet released
 
 6. Support virtual log files.
 
-[Full Changelog](https://github.com/katzer/iss-web/compare/1.5.1...HEAD)
+[Full Changelog](https://github.com/katzer/iss-web/compare/1.5.1...1.5.2)
 
 ## 1.5.1
 
