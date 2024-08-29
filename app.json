@@ -298,7 +298,7 @@
             "enable": true
         },
         "compressor": {
-            "type": "yui"
+            "polyfills": "syntax"
         }
     },
 
@@ -405,6 +405,14 @@
         },
         "js": {
             "filter": "minimum"
+        }
+    },
+
+
+    "language": {
+        "js": {
+            "input": "ES5",
+            "output": "ES5"
         }
     },
 
