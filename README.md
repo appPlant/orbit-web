@@ -11,8 +11,8 @@ More screenshots can be found [here](screenshots)
 
 ## Prerequisites
 
-- Install [Sencha Cmd](https://www.sencha.com/products/sencha-cmd) (^6.7.0)
-- Download [Sencha Ext JS](https://www.sencha.com/products/extjs) (^6.2.1) and
+- Install [Sencha Cmd](https://www.sencha.com/products/sencha-cmd) (^7.8.0)
+- Download [Sencha Ext JS](https://www.sencha.com/products/extjs) (^7.0.0) and
  extract it into a `"sencha-sdks"` folder in your home directory
 
 ## Development
